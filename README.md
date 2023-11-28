@@ -1,5 +1,7 @@
 # Sorosan SDK 
 
+*Note this will be deprecated in use for `sorosan-sdk/core`*
+
 Introducing the Sorosan SDK, your gateway to a seamless Stellar network development experience. With the Sorosan SDK, we're empowering developers to harness the full potential of Stellar with ease. Keep an eye on our updates for exciting features and releases as we embark on this journey together. Star and watch to stay in the loop!
 
 ## Install
