@@ -1,5 +1,4 @@
-import { Address, Contract, Durability, Keypair, Memo, MemoHash, Networks, Operation, Server, SorobanDataBuilder, SorobanRpc, Transaction, TransactionBuilder, assembleTransaction, xdr } from "soroban-client";
-import { BASE_FEE } from "./main";
+import { Address, Contract, Durability, Memo, MemoHash, Operation, Server, SorobanDataBuilder, Transaction, TransactionBuilder, assembleTransaction, xdr } from "soroban-client";
 
 export const decodeContractSpecBuffer = async (buffer: ArrayBuffer) => {
     const bufferData = new Uint8Array(buffer);
@@ -47,7 +46,7 @@ export async function restoreContract(
         .setTimeout(1000)
         .setNetworkPassphrase(network)
         .setSorobanData(new SorobanDataBuilder()
-            .setReadWrite(c.getFootprint())
+            .setReadWrite([c.getFootprint()])
             .build())
         .addOperation(Operation.restoreFootprint({}))
         .build();
@@ -100,7 +99,10 @@ export const bumpContractInstance = async (
     //     .build()
 
     let tx: Transaction = txBuilder
-        .addOperation(Operation.bumpFootprintExpiration({ ledgersToExpire: 10 }))
+        .addOperation(Operation.bumpSequence({ 
+            source: publicKey,
+            bumpTo: "10" 
+        }))
         .setNetworkPassphrase(network)
         .setSorobanData(sorobanData)
         .setTimeout(0)

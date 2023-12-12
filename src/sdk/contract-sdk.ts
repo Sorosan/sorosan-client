@@ -1,4 +1,4 @@
-import { Account, Contract, SorobanRpc, scValToNative, xdr } from 'soroban-client';
+import { Account, Contract, SorobanRpc, StrKey, scValToNative, xdr } from 'soroban-client';
 import { NetworkDetails } from '../lib/network';
 import {
     bumpContractInstance,
@@ -20,6 +20,7 @@ export class ContractSDK extends Soroban {
     constructor(selectedNetwork: NetworkDetails, activePublicKey?: string) {
         super(selectedNetwork, activePublicKey);
     }
+
 
     /**
      * Deploys a WebAssembly (Wasm) smart contract to the blockchain.
@@ -355,12 +356,26 @@ export class ContractSDK extends Soroban {
                 const name = functionV0.name().toString();
                 const doc = functionV0.doc().toString();
 
-                const inputs = functionV0.inputs().map((input: xdr.ScSpecFunctionInputV0) => ({
-                    doc: input.doc().toString(),
-                    name: input.name().toString(),
-                    value: input.type().switch().value,
-                    type: input.type().switch().name
-                }));
+                const inputs = functionV0.inputs().map((input: xdr.ScSpecFunctionInputV0) => {
+                    let val: any = {
+                        doc: input.doc().toString(),
+                        name: input.name().toString(),
+                        value: input.type().switch().value,
+                        type: input.type().switch().name,
+                        optional: false,
+                    }
+                    if (input.type().switch().value === xdr.ScSpecType.scSpecTypeOption().value) {
+                        let opt = input.type().value() as xdr.ScSpecTypeOption;
+                        val.optional = true;
+                        val.type = opt.valueType();     // override type
+                    }
+                    return {
+                        doc: input.doc().toString(),
+                        name: input.name().toString(),
+                        value: input.type().switch().value,
+                        type: input.type().switch().name
+                    }
+                });
 
                 const outputs = functionV0.outputs().map((output: xdr.ScSpecTypeDef) => ({
                     value: output.switch().value,
@@ -454,9 +469,9 @@ export class ContractSDK extends Soroban {
 
         try {
             const transaction = await bumpContractInstance(
-                txBuilder, 
-                this.server, 
-                contractAddress, 
+                txBuilder,
+                this.server,
+                contractAddress,
                 ledger.sequence + 10000,
                 this.publicKey);
 
@@ -494,10 +509,25 @@ export class ContractSDK extends Soroban {
      * const isValid = sdk.contract.isContractHash(hash);
      * console.log(`Is valid contract hash: ${isValid}`);
      */
-    isContractHash(val: string) {
+    isContractHash(val: string): boolean {
         return isContractHash(val);
     }
 
+    /**
+     * Checks if a string is a valid Soroban address.
+     * 
+     * @param val 
+     * @returns 
+     * 
+     * @example
+     * // Check if a string is a valid contract hash.
+     * const address = 'CAN3XZOE6PR54KLLLDWGH5YLFJ54TSMFZAXZVUBJTKHEI6A7BXJ6GTHX'; // Replace with the string to check.
+     * const isValid = sdk.contract.isContract(address);
+     * console.log(`Is valid contract: ${isValid}`);
+     */
+    isContract(val: string): boolean {
+        return val[0] === 'C' && val.length === 56;
+    }
     /**
      * @ignore
      * Helper function that converts an array of Soroban storage entries (xdr.ScMapEntry) to an array of StorageElement objects.

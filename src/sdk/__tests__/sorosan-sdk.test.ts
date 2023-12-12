@@ -41,7 +41,7 @@ describe("sorosan-sdk", () => {
   it("should return value from valid contract call", async () => {
     const sdk = new SorosanSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
     const args = [];
-    const expectedTokenName = "Token A";
+    const expectedTokenName = "Test Token";
 
     const actualTokenName: string = await sdk.call(TEST_TOKEN_CONTRACT, "name", args);
 

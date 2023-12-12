@@ -34,7 +34,8 @@ export const mask = (address: string): string => {
  * @returns {boolean} `true` if the value is a valid account address, `false` otherwise.
  */
 export const isAddress = (val: string): boolean => {
-    return val.length === 56 && /^[a-zA-Z0-9]+$/.test(val);
+    return StrKey.isValidEd25519PublicKey(val);
+    // return val.length === 56 && /^[a-zA-Z0-9]+$/.test(val);
 }
 
 /**

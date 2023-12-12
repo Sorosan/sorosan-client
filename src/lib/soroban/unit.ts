@@ -103,6 +103,12 @@ export const toScVal = (arg: any, type?: string): xdr.ScVal => {
                 case "scvDuration".toLowerCase():
                     var val: xdr.Duration = new xdr.Uint64(arg);
                     return xdr.ScVal.scvDuration(val);
+                case "vec".toLowerCase():
+                case "scvVec".toLowerCase():
+                    const items: xdr.ScVal[] = arg.split(",").map(element =>
+                        nativeToScVal(element, { type: "string" })
+                    );
+                    return xdr.ScVal.scvVec(items);
                 default:
                     return xdr.ScVal.scvString(arg);
             }

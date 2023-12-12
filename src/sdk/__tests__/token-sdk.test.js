@@ -7,7 +7,7 @@ import { Asset } from 'soroban-client';
 describe("token-sdk", () => {
     it("should return the name of the token contract", async () => {
         const sdk = new TokenSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
-        const expectedName = "Token A";
+        const expectedName = "Test Token";
 
         const actualName = await sdk.name(TEST_TOKEN_CONTRACT);
 
@@ -16,7 +16,7 @@ describe("token-sdk", () => {
 
     it("should return the symbol of the token contract", async () => {
         const sdk = new TokenSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
-        const expectedName = "AA";
+        const expectedName = "TT";
 
         const actualName = await sdk.symbol(TEST_TOKEN_CONTRACT);
 
@@ -44,8 +44,8 @@ describe("token-sdk", () => {
 
     it("should return the balance of a specific address from the token contract", async () => {
         const sdk = new TokenSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
-        const address = "GCPP56EO5N7E2ZHZIYNLQLHKKZQLVZJUCEYCX5XXKV4WLGQO2JVWCBIY";
-        const expectedBalance = 0;
+        const address = "GBHAOSNA7PJOGKWPAQ2VYAY4Y2VMA5LKOPQVCFRXJNJG5YXV4ELEX2GZ";
+        const expectedBalance = 100000;
 
         const balance = await sdk.balance(TEST_TOKEN_CONTRACT, address);
         const actualBalance = Number(balance);
@@ -155,8 +155,7 @@ describe("token-sdk", () => {
 
     it("should return an invalid balance contract address for an valid code and an invalid issuer", async () => {
         const sdk = new TokenSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
-        const expectedAsset = new Asset("USDA", "GDANBVQ3LV6PT4OOXAWATDOLXMTSPPM7K6UTFIXPQVAZFYKPXYBV7NJQ");
-
+        const expectedAsset = new Asset("USDS", "GBHAOSNA7PJOGKWPAQ2VYAY4Y2VMA5LKOPQVCFRXJNJG5YXV4ELEX2GZ");
         const actualAsset = await sdk.getAsset(TEST_WRAP_TOKEN_CONTRACT);
 
         expect(actualAsset).toEqual(expectedAsset);

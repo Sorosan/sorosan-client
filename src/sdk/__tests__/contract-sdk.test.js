@@ -87,4 +87,37 @@ describe("contract-sdk", () => {
       expect(specs.length > 0).toBeTruthy();
       expect(expectedToHaveFunctions).toBeTruthy();
     }, 10000);
+
+    it("should return decompile and return contract specs from valid contract successfully",
+    async () => {
+      const sdk = new ContractSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
+
+      const isRestored = await sdk.restore(TEST_TOKEN_CONTRACT);
+      console.log(isRestored);
+
+      // expect(specs).not.toBeNull();
+      // expect(specs.length > 0).toBeTruthy();
+      // expect(expectedToHaveFunctions).toBeTruthy();
+    }, 10000);
+
+    it("should return true for valid contract address",
+    async () => {
+      const sdk = new ContractSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
+
+      const isValid = await sdk.isContract(TEST_TOKEN_CONTRACT);
+      console.log(isRestored);
+      
+      expect(isValid).not.toBeNull();
+      expect(isValid).toBeTruthy();
+    }, 10000);
+
+    it("should return true for valid contract address",
+    async () => {
+      const sdk = new ContractSDK(DEFAULT_NETWORK, TEST_PUBLIC_KEY);
+
+      const isValid = await sdk.isContract("CARE");
+      
+      expect(isValid).not.toBeNull();
+      expect(isValid).toBeFalsy();
+    }, 10000);
 });
